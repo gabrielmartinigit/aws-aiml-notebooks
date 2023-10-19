@@ -1,1 +1,1 @@
-# IA Generativa Workshop
+# NLP Workshop
