@@ -29,7 +29,7 @@ while IFS= read -r username; do
     aws sagemaker update-user-profile \
         --domain-id "$DOMAIN_ID" \
         --user-profile-name "$username" \
-        --user-settings JupyterServerAppSettings={CodeRepositories=[{RepositoryUrl="https://github.com/gabrielmartinigit/nlp-workshop"}]} \
+        --user-settings JupyterServerAppSettings={CodeRepositories=[{RepositoryUrl="https://github.com/gabrielmartinigit/aws-aiml-notebooks"}]} \
         --profile "$PROFILE"
 
     echo "User $username created and added to the $IAM_GROUP_NAME group with a SageMaker profile."
