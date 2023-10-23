@@ -9,12 +9,13 @@ PROFILE="aiml"
 KERNEL_APP_NAME="datascience"
 KERNEL_INSTANCE_TYPE="ml.t3.medium"
 KERNEL_IMAGE_ARN="arn:aws:sagemaker:us-east-1:081325390199:image/sagemaker-data-science-310-v1"
+DEFAULT_PASSWORD=""
 
 # Loop through each user in the users.txt file
 while IFS= read -r username; do
     # Create IAM user
     aws iam create-user --user-name "$username" --profile "$PROFILE"
-    aws iam create-login-profile --user-name "$username" --password "workshop123" --password-reset-required --profile "$PROFILE"
+    aws iam create-login-profile --user-name "$username" --password "$DEFAULT_PASSWORD" --password-reset-required --profile "$PROFILE"
 
     # Add the user to the IAM group
     aws iam add-user-to-group --user-name "$username" --group-name "$IAM_GROUP_NAME" --profile "$PROFILE"
