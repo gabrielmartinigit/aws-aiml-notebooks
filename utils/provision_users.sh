@@ -14,7 +14,7 @@ KERNEL_IMAGE_ARN="arn:aws:sagemaker:us-east-1:081325390199:image/sagemaker-data-
 while IFS= read -r username; do
     # Create IAM user
     aws iam create-user --user-name "$username" --profile "$PROFILE"
-    aws iam create-login-profile --user-name "$username" --password "workshop123" --password-reset-required
+    aws iam create-login-profile --user-name "$username" --password "workshop123" --password-reset-required --profile "$PROFILE"
 
     # Add the user to the IAM group
     aws iam add-user-to-group --user-name "$username" --group-name "$IAM_GROUP_NAME" --profile "$PROFILE"
@@ -25,10 +25,15 @@ while IFS= read -r username; do
         --user-profile-name "$username" \
         --user-settings "{\"ExecutionRole\":\"$ROLE_ARN\"}" \
         --profile "$PROFILE"
+    aws sagemaker update-user-profile \
+        --domain-id "$DOMAIN_ID" \
+        --user-profile-name "$username" \
+        --user-settings JupyterServerAppSettings={CodeRepositories=[{RepositoryUrl="https://github.com/gabrielmartinigit/nlp-workshop"}]} \
+        --profile "$PROFILE"
 
     echo "User $username created and added to the $IAM_GROUP_NAME group with a SageMaker profile."
 
-    # Create Application Default Studio Application
+    Create Application Default Studio Application
     aws sagemaker create-app \
         --domain-id "$DOMAIN_ID" \
         --app-name "$DEFAULT_STUDIO_APP_NAME" \
@@ -50,4 +55,3 @@ while IFS= read -r username; do
 done <users.txt
 
 echo "Script completed."
-echo "Console: https://aiml-workshop.signin.aws.amazon.com/console"
